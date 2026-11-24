@@ -1,1 +1,700 @@
-<h1>Under construction!</h1>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botfor.biz — автоматизация рутины бизнеса с ИИ и Telegram-ботами</title>
+  <meta name="description" content="Запрягай ИИ и освободи время для жизни. Боты, базы знаний и CRM для малого бизнеса: принимаем заявки и отвечаем клиентам 24/7.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Botfor.biz — запрягай ИИ, освободи время для жизни">
+  <meta property="og:description" content="Автоматизируем рутину малого бизнеса: боты, базы знаний, CRM. Бот принимает заявки и отвечает клиентам 24/7.">
+  <meta property="og:image" content="og-cover.png">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23FAF8F5' stroke='%23B87333' stroke-width='3'/%3E%3Cg fill='none' stroke='%23B87333' stroke-width='3'%3E%3Ccircle cx='32' cy='32' r='10'/%3E%3Cpath d='M32 14v6M32 44v6M14 32h6M44 32h6M20 20l4 4M40 40l4 4M44 20l-4 4M24 40l-4 4'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF8F5',
+            sand: '#F5F3EF',
+            graphite: '#1C1C1E',
+            brass: '#B87333',
+            bronze: '#CD7F32',
+            copper: '#8C6239',
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', '"Cormorant Garamond"', 'serif'],
+            body: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    :root {
+      --brass: #B87333;
+      --bronze: #CD7F32;
+      --copper: #8C6239;
+      --graphite: #1C1C1E;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; color: #1C1C1E; background: #FAF8F5; }
+
+    /* Steampunk gear background pattern */
+    .gears-bg {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cg fill='none' stroke='%23B87333' stroke-width='2'%3E%3Ccircle cx='60' cy='60' r='28'/%3E%3Cpath d='M60 20v14M60 86v14M20 60h14M86 60h14M35 35l10 10M75 75l10 10M85 35l-10 10M45 75l-10 10'/%3E%3Ccircle cx='170' cy='170' r='20'/%3E%3Cpath d='M170 138v10M170 192v10M138 170h10M192 170h10M150 150l7 7M183 183l7 7M190 150l-7 7M157 183l-7 7'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 220px 220px;
+    }
+    .gears-bg-soft { opacity: 0.06; }
+
+    /* Brass divider line */
+    .brass-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--brass), transparent);
+    }
+
+    /* Reveal on scroll */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.45s ease-out, transform 0.45s ease-out; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    /* Card rivets */
+    .rivets { position: relative; }
+    .rivets::before, .rivets::after {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #E8C9A6, var(--brass) 60%, var(--copper));
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .rivets::before { top: 10px; left: 10px; }
+    .rivets::after { top: 10px; right: 10px; }
+    .rivets .rivet-bl, .rivets .rivet-br {
+      position: absolute; width: 8px; height: 8px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #E8C9A6, var(--brass) 60%, var(--copper));
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .rivets .rivet-bl { bottom: 10px; left: 10px; }
+    .rivets .rivet-br { bottom: 10px; right: 10px; }
+
+    /* Brass badge */
+    .brass-badge {
+      border: 1px solid var(--bronze);
+      color: var(--copper);
+      background: #FFFDF9;
+    }
+
+    /* Telegram mockup */
+    .tg-chat { background: #E7EBEE; }
+    .tg-bubble { max-width: 82%; }
+    .tg-bubble.bot { background: #fff; border-radius: 16px 16px 16px 4px; }
+    .tg-bubble.user { background: #EFFDDE; border-radius: 16px 16px 4px 16px; }
+    .tg-menu-btn {
+      background: #fff; border: 1px solid #E4E7EB; color: #2481CC;
+      border-radius: 10px; font-weight: 600; font-size: 13px;
+      transition: background 0.2s ease;
+    }
+    .tg-menu-btn:hover { background: #F0F6FC; }
+
+    /* Steampunk button */
+    .btn-brass {
+      background: linear-gradient(180deg, #CD7F32, #B87333);
+      color: #fff;
+      box-shadow: 0 2px 0 #8C6239, 0 6px 16px rgba(184,115,51,0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-brass:hover { transform: translateY(-2px); box-shadow: 0 4px 0 #8C6239, 0 10px 22px rgba(184,115,51,0.4); }
+    .btn-brass:active { transform: translateY(0); box-shadow: 0 1px 0 #8C6239; }
+
+    .btn-outline {
+      border: 1px solid var(--bronze);
+      color: var(--copper);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .btn-outline:hover { background: #F5EADF; }
+
+    /* Floating telegram button */
+    #floatBtn { opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease; }
+    #floatBtn.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    /* Timeline */
+    .timeline-line {
+      position: absolute; left: 12px; top: 0; bottom: 0; width: 2px;
+      background: linear-gradient(180deg, var(--brass), var(--bronze), transparent);
+    }
+
+    /* FAQ */
+    details summary::-webkit-details-marker { display: none; }
+    details[open] .faq-icon { transform: rotate(45deg); }
+    .faq-icon { transition: transform 0.25s ease; }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .btn-brass, .btn-outline, .tg-menu-btn, .faq-icon, #floatBtn { transition: none; }
+      .btn-brass:hover, .btn-outline:hover { transform: none; }
+      * { animation: none !important; }
+    }
+
+    /* Mobile menu */
+    #mobileMenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    #mobileMenu.open { max-height: 320px; }
+  </style>
+</head>
+<body class="bg-cream font-body antialiased">
+
+  <!-- ============ HEADER ============ -->
+  <header class="sticky top-0 z-50 bg-cream/90 backdrop-blur border-b border-brass/20">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between" aria-label="Основная навигация">
+      <a href="#top" class="flex items-center gap-2">
+        <img src="logo.png" alt="Botfor.biz" class="h-9 w-auto hidden sm:block">
+        <span class="sm:hidden brass-badge rounded px-2 py-1 font-display font-semibold text-sm tracking-wide">Botfor.biz</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-graphite/80">
+        <a href="#services" class="hover:text-brass transition-colors">Услуги</a>
+        <a href="#pricing" class="hover:text-brass transition-colors">Цены</a>
+        <a href="#cases" class="hover:text-brass transition-colors">Примеры</a>
+        <a href="#process" class="hover:text-brass transition-colors">Как работаем</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="https://t.me/Yoga_Soulby?start=header" target="_blank" rel="noopener"
+           class="hidden sm:inline-flex btn-brass rounded-lg px-4 py-2 text-sm font-semibold">
+          Обсудить проект
+        </a>
+        <button id="burgerBtn" class="md:hidden p-2 rounded-lg hover:bg-sand" aria-label="Открыть меню" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div id="mobileMenu" class="md:hidden bg-cream border-t border-brass/20">
+      <div class="px-4 py-3 flex flex-col gap-3 text-sm font-medium">
+        <a href="#services" class="py-1 hover:text-brass">Услуги</a>
+        <a href="#pricing" class="py-1 hover:text-brass">Цены</a>
+        <a href="#cases" class="py-1 hover:text-brass">Примеры</a>
+        <a href="#process" class="py-1 hover:text-brass">Как работаем</a>
+        <a href="https://t.me/Yoga_Soulby?start=header" target="_blank" rel="noopener" class="btn-brass rounded-lg px-4 py-2.5 text-center font-semibold">Обсудить проект</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="gears-bg gears-bg-soft relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-14 pb-16 md:pt-20 md:pb-24 grid md:grid-cols-2 gap-10 md:gap-12 items-center">
+        <div class="reveal">
+          <p class="brass-badge inline-block rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase mb-5">Автоматизация для малого бизнеса</p>
+          <h1 class="font-display text-4xl sm:text-5xl md:text-6xl leading-tight font-semibold text-graphite">
+            Запрягай ИИ —<br>освободи себе время<br><span class="text-brass italic">для жизни</span>
+          </h1>
+          <p class="mt-5 text-lg text-graphite/70 leading-relaxed">
+            Бот принимает заявки, отвечает клиентам и ведёт запись, пока вы занимаетесь делом.
+            Автоматизируем рутину вашего бизнеса: боты, базы знаний, CRM.
+          </p>
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <a href="https://t.me/Yoga_Soulby?start=hero" target="_blank" rel="noopener"
+               class="btn-brass rounded-xl px-7 py-3.5 text-center font-semibold text-base">Обсудить проект</a>
+            <a href="#services"
+               class="btn-outline rounded-xl px-7 py-3.5 text-center font-semibold text-base">Посмотреть услуги</a>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <span class="brass-badge rounded-full px-3.5 py-1.5 text-sm font-medium">Запуск от 3 дней</span>
+            <span class="brass-badge rounded-full px-3.5 py-1.5 text-sm font-medium">Фиксированная цена</span>
+            <span class="brass-badge rounded-full px-3.5 py-1.5 text-sm font-medium">Работаем удалённо</span>
+          </div>
+        </div>
+
+        <!-- Telegram mockup -->
+        <div class="reveal relative">
+          <div class="tg-chat rounded-3xl shadow-xl p-4 sm:p-5 max-w-sm mx-auto rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <div class="flex items-center gap-2 pb-3 border-b border-black/10 mb-3">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-br from-brass to-copper flex items-center justify-center text-white font-bold">B</div>
+              <div>
+                <p class="text-sm font-semibold text-graphite">Botfor.biz</p>
+                <p class="text-xs text-green-600">онлайн</p>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2.5 text-sm">
+              <div class="tg-bubble bot px-3 py-2 text-graphite/90">Здравствуйте! 👋 Запишу вас на маникюр или ответим на вопросы?</div>
+              <div class="tg-bubble user px-3 py-2 text-graphite/90 self-end">Хочу завтра к 15:00</div>
+              <div class="tg-bubble bot px-3 py-2 text-graphite/90">Отлично, на 15:00 есть свободное окно. Подтверждаете запись?</div>
+              <div class="flex flex-wrap gap-2 pt-1">
+                <button class="tg-menu-btn px-3 py-1.5">✅ Подтвердить</button>
+                <button class="tg-menu-btn px-3 py-1.5">📅 Другое время</button>
+                <button class="tg-menu-btn px-3 py-1.5">💅 Прайс</button>
+              </div>
+              <div class="tg-bubble bot px-3 py-2 text-graphite/90">Готово! Напомню за час до визита. Хорошего дня 🌿</div>
+            </div>
+          </div>
+          <p class="text-center text-xs text-graphite/50 mt-3">Так выглядит ваш бот. Он не спит и не отвлекается.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PAIN / SOLUTION ============ -->
+    <section class="py-16 md:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="reveal max-w-2xl">
+          <h2 class="font-display text-3xl sm:text-4xl font-semibold text-graphite">Знакомые проблемы — и как мы их решаем</h2>
+          <div class="brass-line mt-5"></div>
+        </div>
+        <div class="mt-10 grid md:grid-cols-2 gap-6">
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <h3 class="font-semibold text-graphite">Заявки теряются в переписках</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Клиент написал — и пропал, потому что вы были заняты. Потом ищете диалог по всему телефону.</p>
+            <p class="mt-3 text-sm font-medium text-copper">Решение: бот ловит заявку в момент, когда она пришла, и сразу записывает её в нужное место. Ничего не теряется.</p>
+          </article>
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <h3 class="font-semibold text-graphite">Однотипные вопросы съедают часы</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">«Сколько стоит?», «Когда работаете?», «Есть ли доставка?» — вы отвечаете на это по десять раз в день.</p>
+            <p class="mt-3 text-sm font-medium text-copper">Решение: бот отвечает на частые вопросы 24/7 и передаёт вам только то, что требует вашего участия.</p>
+          </article>
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <h3 class="font-semibold text-graphite">Нет учёта клиентов</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Кто что заказывал, кто готов вернуться, кому пора напомнить — всё в голове или в разрозненных заметках.</p>
+            <p class="mt-3 text-sm font-medium text-copper">Решение: бот помнит клиентов, заказы и статусы, а вам присылает уведомления и выгрузки.</p>
+          </article>
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <h3 class="font-semibold text-graphite">Знания живут только в голове сотрудника</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Ушёл человек — ушла и половина знаний о ваших прайсах, регламентах и клиентах.</p>
+            <p class="mt-3 text-sm font-medium text-copper">Решение: собираем знания в базу, и бот отвечает по вашим документам, ничего не выдумывая.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES ============ -->
+    <section id="services" class="py-16 md:py-24 bg-sand">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="reveal max-w-2xl">
+          <h2 class="font-display text-3xl sm:text-4xl font-semibold text-graphite">Что мы автоматизируем</h2>
+          <p class="mt-3 text-graphite/70">Не «внедряем технологии», а убираем рутину. Вот что вы получите через неделю.</p>
+          <div class="brass-line mt-5"></div>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-2 gap-6">
+          <!-- Flagship: chat bots -->
+          <article class="reveal md:col-span-2 bg-white rounded-2xl p-6 sm:p-8 shadow-md rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brass to-copper flex items-center justify-center text-white">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                  </div>
+                  <h3 class="font-display text-2xl font-semibold text-graphite">Чат-боты с меню в Telegram</h3>
+                </div>
+                <p class="mt-4 text-graphite/70 leading-relaxed">Наш флагман. Бот с кнопками-меню принимает заявки, записывает клиентов и отвечает на частые вопросы — круглосуточно, без выходных и отпусков. Вы занимаетесь делом, а не перепиской.</p>
+                <p class="mt-3 text-sm font-medium text-copper">Что вы получаете: ни одна заявка не теряется, клиент получает ответ за секунды, а вы — готовую запись в календаре.</p>
+                <ul class="mt-4 space-y-2 text-sm text-graphite/80">
+                  <li class="flex gap-2"><span class="text-brass">◆</span>Приём заявок и запись клиентов</li>
+                  <li class="flex gap-2"><span class="text-brass">◆</span>Ответы на частые вопросы 24/7</li>
+                  <li class="flex gap-2"><span class="text-brass">◆</span>Меню с кнопками — клиенту не нужно ничего писать</li>
+                  <li class="flex gap-2"><span class="text-brass">◆</span>Уведомления вам о каждой заявке</li>
+                </ul>
+              </div>
+              <div class="tg-chat rounded-2xl p-4 max-w-sm mx-auto w-full">
+                <div class="flex flex-col gap-2.5 text-sm">
+                  <div class="tg-bubble bot px-3 py-2 text-graphite/90">Выберите, что вас интересует:</div>
+                  <div class="flex flex-wrap gap-2">
+                    <button class="tg-menu-btn px-3 py-1.5">🛍 Заказать</button>
+                    <button class="tg-menu-btn px-3 py-1.5">📦 Статус заказа</button>
+                    <button class="tg-menu-btn px-3 py-1.5">❓ Вопрос</button>
+                  </div>
+                  <div class="tg-bubble bot px-3 py-2 text-graphite/90">Заявка принята! Менеджер вернётся к вам в течение 10 минут.</div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Databases -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brass to-copper flex items-center justify-center text-white">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <h3 class="mt-4 font-display text-xl font-semibold text-graphite">Работа с базами данных</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Бот помнит клиентов, заказы и статусы. Вам — уведомления и выгрузки, а не таблицы, которые надо вести руками.</p>
+            <ul class="mt-4 space-y-2 text-sm text-graphite/80">
+              <li class="flex gap-2"><span class="text-brass">◆</span>История клиентов и заказов</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Статусы и напоминания</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Уведомления владельцу</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Выгрузки в удобном формате</li>
+            </ul>
+          </article>
+
+          <!-- RAG agents -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brass to-copper flex items-center justify-center text-white">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <h3 class="mt-4 font-display text-xl font-semibold text-graphite">RAG-агенты — база знаний</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Бот отвечает по вашим документам, прайсам и регламентам. И не выдумывает того, чего в них нет.</p>
+            <ul class="mt-4 space-y-2 text-sm text-graphite/80">
+              <li class="flex gap-2"><span class="text-brass">◆</span>Ответы строго по вашим данным</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Прайсы, регламенты, инструкции</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Обновление знаний без программиста</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Ссылка на источник в ответе</li>
+            </ul>
+          </article>
+
+          <!-- CRM -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brass to-copper flex items-center justify-center text-white">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+            </div>
+            <h3 class="mt-4 font-display text-xl font-semibold text-graphite">Разработка CRM</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Своя CRM под ваш процесс, а не наоборот. Воронка, задачи, напоминания и отчёты — как удобно вам.</p>
+            <ul class="mt-4 space-y-2 text-sm text-graphite/80">
+              <li class="flex gap-2"><span class="text-brass">◆</span>Воронка под ваш процесс</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Задачи и напоминания</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Отчёты по продажам</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Интерфейс на русском, без обучения</li>
+            </ul>
+          </article>
+
+          <!-- Integrations -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brass to-copper flex items-center justify-center text-white">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </div>
+            <h3 class="mt-4 font-display text-xl font-semibold text-graphite">Интеграции</h3>
+            <p class="mt-2 text-graphite/70 text-sm leading-relaxed">Подключаем к тому, чем вы уже пользуетесь. Без переезда на новые системы и без боли.</p>
+            <ul class="mt-4 space-y-2 text-sm text-graphite/80">
+              <li class="flex gap-2"><span class="text-brass">◆</span>Google Sheets</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Приём оплаты</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Календарь и запись</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Сайт и формы</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section id="pricing" class="py-16 md:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="reveal max-w-2xl">
+          <h2 class="font-display text-3xl sm:text-4xl font-semibold text-graphite">Сколько это стоит</h2>
+          <p class="mt-3 text-graphite/70">Фиксированная цена за результат. Без скрытых доплат на середине пути.</p>
+          <div class="brass-line mt-5"></div>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-3 gap-6 items-stretch">
+          <!-- Start -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets flex flex-col">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <h3 class="font-display text-xl font-semibold text-graphite">Старт</h3>
+            <p class="mt-1 text-sm text-graphite/60">Попробовать автоматизацию</p>
+            <p class="mt-4 text-4xl font-display font-semibold text-graphite">$190</p>
+            <p class="text-xs text-graphite/50 mt-1">срок 3–5 дней</p>
+            <ul class="mt-5 space-y-2 text-sm text-graphite/80 flex-1">
+              <li class="flex gap-2"><span class="text-brass">◆</span>Меню-бот в Telegram</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>1 сценарий</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>До 5 разделов</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Подключение к Telegram</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Инструкция</li>
+            </ul>
+            <a href="https://t.me/Yoga_Soulby?start=pricing" target="_blank" rel="noopener" class="btn-outline rounded-xl px-5 py-3 mt-6 text-center font-semibold text-sm">Выбрать «Старт»</a>
+          </article>
+
+          <!-- Business (popular) -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-lg rivets flex flex-col ring-2 ring-brass relative md:-my-3 md:py-8">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 brass-badge rounded-full px-4 py-1 text-xs font-bold uppercase tracking-wide">Популярный</span>
+            <h3 class="font-display text-xl font-semibold text-graphite">Бизнес</h3>
+            <p class="mt-1 text-sm text-graphite/60">Закрыть рутину целиком</p>
+            <p class="mt-4 text-4xl font-display font-semibold text-brass">$490</p>
+            <p class="text-xs text-graphite/50 mt-1">срок 7–10 дней</p>
+            <ul class="mt-5 space-y-2 text-sm text-graphite/80 flex-1">
+              <li class="flex gap-2"><span class="text-brass">◆</span>Многоуровневое меню</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Заявки в Google Sheets / CRM</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Уведомления владельцу</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Работа с БД: клиенты и заказы</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>2 интеграции</li>
+            </ul>
+            <a href="https://t.me/Yoga_Soulby?start=pricing" target="_blank" rel="noopener" class="btn-brass rounded-xl px-5 py-3 mt-6 text-center font-semibold text-sm">Выбрать «Бизнес»</a>
+          </article>
+
+          <!-- Turnkey -->
+          <article class="reveal bg-white rounded-2xl p-6 shadow-sm rivets flex flex-col">
+            <span class="rivet-bl"></span><span class="rivet-br"></span>
+            <h3 class="font-display text-xl font-semibold text-graphite">Под ключ</h3>
+            <p class="mt-1 text-sm text-graphite/60">Максимум автоматизации</p>
+            <p class="mt-4 text-4xl font-display font-semibold text-graphite">$1 200</p>
+            <p class="text-xs text-graphite/50 mt-1">срок 2–4 недели</p>
+            <ul class="mt-5 space-y-2 text-sm text-graphite/80 flex-1">
+              <li class="flex gap-2"><span class="text-brass">◆</span>RAG-агент по вашей базе знаний</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>CRM-модуль</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Аналитика</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Поддержка 30 дней</li>
+              <li class="flex gap-2"><span class="text-brass">◆</span>Обучение команды</li>
+            </ul>
+            <a href="https://t.me/Yoga_Soulby?start=pricing" target="_blank" rel="noopener" class="btn-outline rounded-xl px-5 py-3 mt-6 text-center font-semibold text-sm">Выбрать «Под ключ»</a>
+          </article>
+        </div>
+
+        <p class="reveal mt-8 text-center text-sm text-graphite/50 max-w-xl mx-auto">
+          Точная цена — после короткого брифа в Telegram. Возможна оплата в 2 этапа. Цены указаны в USD.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ CASES ============ -->
+    <section id="cases" class="py-16 md:py-24 bg-sand">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="reveal max-w-2xl">
+          <h2 class="font-display text-3xl sm:text-4xl font-semibold text-graphite">Примеры</h2>
+          <p class="mt-3 text-graphite/70">Как выглядит работа с нами на живых задачах. Имена клиентов изменены.</p>
+          <div class="brass-line mt-5"></div>
+        </div>
+
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <article class="reveal bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+            <div class="placeholder aspect-video bg-sand border-b border-brass/20 flex items-center justify-center">
+              <span class="text-sm text-graphite/40">Скриншот бота — заменить на свой</span>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="font-display text-xl font-semibold text-graphite">Интернет-магазин</h3>
+              <p class="mt-2 text-sm font-medium text-copper">Задача</p>
+              <p class="text-sm text-graphite/70">Клиенты спрашивали статус заказа в мессенджере, менеджер отвечал вручную.</p>
+              <p class="mt-3 text-sm font-medium text-copper">Что сделали</p>
+              <p class="text-sm text-graphite/70">Бот с меню: заказ, статус, вопросы. Подключили к базе заказов.</p>
+              <p class="mt-3 text-sm font-medium text-copper">Результат</p>
+              <p class="text-sm text-graphite/70">Ответы по статусам ушли в автоматику, у менеджера освободились часы на продажи.</p>
+            </div>
+          </article>
+
+          <article class="reveal bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+            <div class="placeholder aspect-video bg-sand border-b border-brass/20 flex items-center justify-center">
+              <span class="text-sm text-graphite/40">Скриншот бота — заменить на свой</span>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="font-display text-xl font-semibold text-graphite">Студия маникюра</h3>
+              <p class="mt-2 text-sm font-medium text-copper">Задача</p>
+              <p class="text-sm text-graphite/70">Записи велись в сообщениях, случались накладки и забытые визиты.</p>
+              <p class="mt-3 text-sm font-medium text-copper">Что сделали</p>
+              <p class="text-sm text-graphite/70">Бот записывает клиентов, подтверждает и напоминает о визите.</p>
+              <p class="mt-3 text-sm font-medium text-copper">Результат</p>
+              <p class="text-sm text-graphite/70">Запись идёт сама, напоминания снижают неявки, мастер не отвлекается от работы.</p>
+            </div>
+          </article>
+
+          <article class="reveal bg-white rounded-2xl overflow-hidden shadow-sm flex flex-col">
+            <div class="placeholder aspect-video bg-sand border-b border-brass/20 flex items-center justify-center">
+              <span class="text-sm text-graphite/40">Скриншот бота — заменить на свой</span>
+            </div>
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="font-display text-xl font-semibold text-graphite">Онлайн-школа</h3>
+              <p class="mt-2 text-sm font-medium text-copper">Задача</p>
+              <p class="text-sm text-graphite/70">Один и тот же вопрос о курсах и оплате задавали десятки раз в день.</p>
+              <p class="mt-3 text-sm font-medium text-copper">Что сделали</p>
+              <p class="text-sm text-graphite/70">RAG-агент по базе знаний школы: программы, цены, условия.</p>
+              <p class="mt-3 text-sm font-medium text-copper">Результат</p>
+              <p class="text-sm text-graphite/70">Типовые вопросы закрывает бот, команда отвечает только на сложные.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCESS ============ -->
+    <section id="process" class="py-16 md:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="reveal max-w-2xl">
+          <h2 class="font-display text-3xl sm:text-4xl font-semibold text-graphite">Как мы работаем</h2>
+          <p class="mt-3 text-graphite/70">Прозрачный процесс из четырёх шагов. Вы всегда знаете, что происходит.</p>
+          <div class="brass-line mt-5"></div>
+        </div>
+
+        <div class="mt-10 relative pl-10">
+          <div class="timeline-line"></div>
+          <ol class="space-y-8">
+            <li class="reveal relative">
+              <span class="absolute -left-10 top-1 w-5 h-5 rounded-full bg-brass ring-4 ring-brass/20"></span>
+              <h3 class="font-semibold text-graphite text-lg">Бриф в Telegram — 15 минут</h3>
+              <p class="mt-1 text-graphite/70 text-sm">Обсуждаем вашу задачу, отвечаем на вопросы, фиксируем объём и цену.</p>
+            </li>
+            <li class="reveal relative">
+              <span class="absolute -left-10 top-1 w-5 h-5 rounded-full bg-brass ring-4 ring-brass/20"></span>
+              <h3 class="font-semibold text-graphite text-lg">Прототип и сценарий</h3>
+              <p class="mt-1 text-graphite/70 text-sm">Показываем, как бот будет работать, и согласовываем сценарий до разработки.</p>
+            </li>
+            <li class="reveal relative">
+              <span class="absolute -left-10 top-1 w-5 h-5 rounded-full bg-brass ring-4 ring-brass/20"></span>
+              <h3 class="font-semibold text-graphite text-lg">Разработка и тесты</h3>
+              <p class="mt-1 text-graphite/70 text-sm">Собираем бота, проверяем все сценарии, чтобы он работал без сбоев.</p>
+            </li>
+            <li class="reveal relative">
+              <span class="absolute -left-10 top-1 w-5 h-5 rounded-full bg-brass ring-4 ring-brass/20"></span>
+              <h3 class="font-semibold text-graphite text-lg">Запуск и передача с обучением</h3>
+              <p class="mt-1 text-graphite/70 text-sm">Запускаем, обучаем вас и команду, передаём доступы и инструкцию.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section id="faq" class="py-16 md:py-24 bg-sand">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        <div class="reveal text-center">
+          <h2 class="font-display text-3xl sm:text-4xl font-semibold text-graphite">Вопросы</h2>
+          <div class="brass-line mt-5 max-w-xs mx-auto"></div>
+        </div>
+
+        <div class="mt-10 space-y-3">
+          <details class="reveal bg-white rounded-xl shadow-sm">
+            <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer font-medium text-graphite">
+              Сколько времени займёт запуск?
+              <span class="faq-icon text-brass text-2xl leading-none">+</span>
+            </summary>
+            <p class="px-5 pb-5 text-sm text-graphite/70">От 3 дней на простого меню-бота до 2–4 недель на комплексное решение. Точный срок назовём после брифа.</p>
+          </details>
+          <details class="reveal bg-white rounded-xl shadow-sm">
+            <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer font-medium text-graphite">
+              Что нужно от меня?
+              <span class="faq-icon text-brass text-2xl leading-none">+</span>
+            </summary>
+            <p class="px-5 pb-5 text-sm text-graphite/70">Только 15 минут на бриф и ответы на пару вопросов. Всю техническую часть берём на себя.</p>
+          </details>
+          <details class="reveal bg-white rounded-xl shadow-sm">
+            <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer font-medium text-graphite">
+              У меня уже есть сайт и CRM. Что тогда?
+              <span class="faq-icon text-brass text-2xl leading-none">+</span>
+            </summary>
+            <p class="px-5 pb-5 text-sm text-graphite/70">Отлично — подключаем бота к тому, что уже работает. Ничего не ломаем и не заставляем переезжать.</p>
+          </details>
+          <details class="reveal bg-white rounded-xl shadow-sm">
+            <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer font-medium text-graphite">
+              Кто оплачивает хостинг и сервер?
+              <span class="faq-icon text-brass text-2xl leading-none">+</span>
+            </summary>
+            <p class="px-5 pb-5 text-sm text-graphite/70">Стоимость хостинга и сервера небольшая и входит в тариф или оплачивается отдельно — обсудим на брифе.</p>
+          </details>
+          <details class="reveal bg-white rounded-xl shadow-sm">
+            <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer font-medium text-graphite">
+              Что с обновлениями после сдачи?
+              <span class="faq-icon text-brass text-2xl leading-none">+</span>
+            </summary>
+            <p class="px-5 pb-5 text-sm text-graphite/70">В тарифе «Под ключ» — поддержка 30 дней. Дальше поможем с доработками по мере роста вашего бизнеса.</p>
+          </details>
+          <details class="reveal bg-white rounded-xl shadow-sm">
+            <summary class="flex items-center justify-between gap-4 p-5 cursor-pointer font-medium text-graphite">
+              Как я получу бота?
+              <span class="faq-icon text-brass text-2xl leading-none">+</span>
+            </summary>
+            <p class="px-5 pb-5 text-sm text-graphite/70">Передаём готового бота, доступы и короткую инструкцию. Обучаем вас и команду, чтобы вы всем управляли сами.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="py-16 md:py-24 bg-graphite text-cream relative overflow-hidden">
+      <div class="gears-bg gears-bg-soft absolute inset-0 opacity-40"></div>
+      <div class="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
+        <div class="reveal">
+          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-semibold leading-tight">
+            Пока вы читали эту страницу, клиент мог написать вам в директ.
+          </h2>
+          <p class="mt-4 text-lg text-cream/70">Бот бы уже ответил. Давайте запряжём ИИ и на ваш бизнес.</p>
+          <div class="brass-line mt-8 max-w-xs mx-auto"></div>
+          <a href="https://t.me/Yoga_Soulby?start=final" target="_blank" rel="noopener"
+             class="btn-brass inline-block rounded-xl px-8 py-4 mt-8 font-semibold text-lg">Написать в Telegram</a>
+          <p class="mt-4 text-sm text-cream/50">Ответим в течение пары часов в рабочее время.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="bg-sand py-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-graphite/60">
+      <div class="flex items-center gap-2">
+        <img src="logo.png" alt="Botfor.biz" class="h-7 w-auto">
+        <span class="font-display font-semibold text-graphite">Botfor.biz</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>Telegram <a href="https://t.me/Yoga_Soulby" target="_blank" rel="noopener" class="text-brass hover:underline">@Yoga_Soulby</a></span>
+      </div>
+      <div class="text-center sm:text-right">
+        <p>© 2026 Botfor.biz</p>
+        <p class="text-xs text-graphite/40">Сделано с помощью ИИ — как и всё, что мы автоматизируем.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ FLOATING TELEGRAM BUTTON ============ -->
+  <a href="https://t.me/Yoga_Soulby?start=float" target="_blank" rel="noopener" id="floatBtn"
+     class="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-brass to-copper text-white flex items-center justify-center shadow-lg"
+     aria-label="Написать в Telegram">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.6c.3-1.1-.8-2-1.8-1.6L2.6 9.7c-1.1.4-1 1.9.1 2.2l4.4 1.3 1.7 5.4c.3 1 1.6 1.2 2.2.4l2.4-2.9 4.5 3.3c.9.6 2.1.2 2.3-.9l1.7-13.9zM8.6 12.6l9.3-5.7c.4-.2.8.3.5.6l-7.3 7.1-.3 3.1-2.2-5.1z"/></svg>
+  </a>
+
+  <script>
+    // Mobile menu toggle
+    const burger = document.getElementById('burgerBtn');
+    const menu = document.getElementById('mobileMenu');
+    burger.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      menu.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }));
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // Floating button after 600px scroll (mobile & tablet only)
+    const floatBtn = document.getElementById('floatBtn');
+    const mq = window.matchMedia('(min-width: 768px)');
+    function updateFloat() {
+      if (!mq.matches && window.scrollY > 600) {
+        floatBtn.classList.add('show');
+      } else {
+        floatBtn.classList.remove('show');
+      }
+    }
+    window.addEventListener('scroll', updateFloat, { passive: true });
+    updateFloat();
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Botfor.biz",
+    "description": "Автоматизация рутины малого бизнеса с помощью ИИ и Telegram-ботов: чат-боты, базы знаний, CRM и интеграции.",
+    "areaServed": "RU",
+    "priceRange": "$$",
+    "url": "https://botfor.biz",
+    "sameAs": ["https://t.me/Yoga_Soulby"]
+  }
+  </script>
+</body>
+</html>
